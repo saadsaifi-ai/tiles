@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <style>
+    .cart-spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        font-size: 24px;
+        color: #28a745; /* You can change this to your preferred color */
+    }
+    </style>
+
+</head>
+<body>
+
+    <div class="container my-5">
+        <h2 class="text-center">Your Cart</h2>
+        <div class="row">
+            <?php if ($cartItems): ?>
+                <?php foreach ($cartItems as $item): ?>
+                    <div class="col-md-4 text-center">
+                        <h4><?php echo htmlspecialchars($item['name'], ENT_QUOTES); ?></h4>
+                        <img src="../images/<?php echo htmlspecialchars($item['image'], ENT_QUOTES); ?>" alt="<?php echo htmlspecialchars($item['name'], ENT_QUOTES); ?>" class="img-fluid" style="width:300px; height:200px;">
+                        <p>Price: Rs.<?php echo htmlspecialchars($item['price'], ENT_QUOTES); ?></p>
+                        <p>Quantity: <input type="number" class="form-control quantity-input" data-id="<?php echo $item['product_id']; ?>" value="<?php echo $item['quantity']; ?>" min="1"></p>
+                        <a href="javascript:void(0);" class="btn btn-danger btn-sm mt-2 remove-from-cart" data-id="<?php echo $item['product_id']; ?>">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </a>
+                        <button class="btn btn-primary btn-sm mt-2 update-quantity" data-id="<?php echo $item['product_id']; ?>">Update Quantity</button>
+                    </div>
+                <?php endforeach; ?>
+                <div class="col-md-12 text-right">
+                    <h4>Subtotal: Rs.<?php echo htmlspecialchars($total, ENT_QUOTES); ?></h4>
+                    <a href="checkout.php" class="btn btn-success btn-sm mt-2">Proceed to Checkout</a>
+                </div>
+            <?php else: ?>
+                <p>Your cart is empty.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="cart.js"></script>
+
+</body>
+</html>
