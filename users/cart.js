@@ -1,13 +1,11 @@
 $(document).ready(function () {
-    
-    // Load cart count on page load
+
     updateCartCount();
 
     // Add to Cart
     $('.add-to-cart').click(function () {
         var productId = $(this).data('id');
 
-        // Create spinner icon
         var spinner = $('<div class="cart-spinner"><i class="fa fa-spinner fa-spin"></i></div>');
         $('body').append(spinner);
 
@@ -31,8 +29,8 @@ $(document).ready(function () {
             url: 'users/cart.php?action=count',
             method: 'GET',
             success: function (response) {
-                let result = JSON.parse(response);  // Ensure JSON parsing
-                $('#cart-count').text(result.count);  // Update the cart icon with the correct count
+                let result = JSON.parse(response);  
+                $('#cart-count').text(result.count);  
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error("Failed to update cart count: " + textStatus + ' : ' + errorThrown);
@@ -46,7 +44,6 @@ $(document).ready(function () {
     $('.remove-from-cart').click(function () {
         var productId = $(this).data('id');
 
-        // Create spinner icon
         var spinner = $('<div class="cart-spinner"><i class="fa fa-spinner fa-spin"></i></div>');
         $('body').append(spinner);
 
@@ -64,10 +61,10 @@ $(document).ready(function () {
         });
     });
 
+
     // Update Quantity
     $('.update-quantity').click(function () {
         var productId = $(this).data('id');
-        // Change the selector to find the quantity input within the same container
         var quantity = $(this).closest('.col-md-4').find('.quantity-input').val();
         console.log(quantity);
         console.log(productId);
@@ -76,7 +73,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Create spinner icon
         var spinner = $('<div class="cart-spinner"><i class="fa fa-spinner fa-spin"></i></div>');
         $('body').append(spinner);
 
@@ -88,7 +84,7 @@ $(document).ready(function () {
                 console.log(response); 
                 spinner.fadeOut(function() {
                     $(this).remove();
-                    // location.reload(); 
+                     location.reload(); 
                 });
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -14,32 +14,33 @@ class CartOperations {
     }
 
     public function addToCart($user_id, $product_id, $quantity) {
-        // Check if the product already exists in the cart
-        $query = "SELECT id, quantity FROM qoutes WHERE user_id = ? AND product_id = ?";
+        // Check if the product already exists in the cart but without an associated order (order_id is NULL)
+        $query = "SELECT id, quantity FROM qoutes WHERE user_id = ? AND product_id = ? AND order_id IS NULL";
         $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "ii", $user_id, $product_id);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $cartItem = mysqli_fetch_assoc($result);
-
+    
         if ($cartItem) {
-            // If the item exists, update the quantity
+            // If the item exists in the current cart (i.e., hasn't been ordered), update the quantity
             $new_quantity = $cartItem['quantity'] + $quantity;
             $updateQuery = "UPDATE qoutes SET quantity = ? WHERE id = ?";
             $updateStmt = mysqli_prepare($this->dbh, $updateQuery);
             mysqli_stmt_bind_param($updateStmt, "ii", $new_quantity, $cartItem['id']);
             mysqli_stmt_execute($updateStmt);
         } else {
-            // If the item does not exist, add it to the cart
+            // If the item does not exist in the current cart, add it to the cart
             $query = "INSERT INTO qoutes (user_id, product_id, quantity) VALUES (?, ?, ?)";
             $stmt = mysqli_prepare($this->dbh, $query);
             mysqli_stmt_bind_param($stmt, "iii", $user_id, $product_id, $quantity);
             mysqli_stmt_execute($stmt);
         }
     }
+    
 
     public function removeFromCart($product_id) {
-        $query = "DELETE FROM qoutes WHERE product_id = ?";
+        $query = "DELETE FROM qoutes WHERE product_id = ? AND order_id IS NULL";
         $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "i", $product_id);
         mysqli_stmt_execute($stmt);
@@ -49,30 +50,30 @@ class CartOperations {
         $query = "SELECT qoutes.*, products.name, products.price, products.image 
                   FROM qoutes 
                   JOIN products ON qoutes.product_id = products.id 
-                  WHERE qoutes.user_id = ?";
-        $stmt = mysqli_prepare($this->dbh, $query); 
+                  WHERE qoutes.user_id = ? AND qoutes.order_id IS NULL";
+        $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "i", $user_id);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+    
 
     public function getCartTotal($user_id) {
         $query = "SELECT SUM(products.price * qoutes.quantity) AS total 
                   FROM qoutes 
                   JOIN products ON qoutes.product_id = products.id 
-                  WHERE qoutes.user_id = ?";
+                  WHERE qoutes.user_id = ? AND qoutes.order_id IS NULL";
         $stmt = mysqli_prepare($this->dbh, $query); 
         mysqli_stmt_bind_param($stmt, "i", $user_id);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_assoc($result)['total'];
     }
-
     
-    // Save user details
+
     public function saveUserDetails($user_id, $contact, $address) {
-        // Check if user details already exist
+
         $query = "SELECT id FROM user_details WHERE user_id = ?";
         $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "i", $user_id);
@@ -93,7 +94,6 @@ class CartOperations {
         mysqli_stmt_execute($stmt);
     }
 
-    // Create order
     public function createOrder($user_id, $total) {
         $query = "INSERT INTO orders (user_id, bill) VALUES (?, ?)";
         $stmt = mysqli_prepare($this->dbh, $query);
@@ -103,16 +103,15 @@ class CartOperations {
     }
 
     public function createOrderItems($order_id, $cartItems) {
-        // Prepare the query to insert order items
+
         $query = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($this->dbh, $query);
     
-        // Loop through each cart item and insert it as an order item
         foreach ($cartItems as $item) {
             mysqli_stmt_bind_param($stmt, "iiid", $order_id, $item['product_id'], $item['quantity'], $item['price']);
             mysqli_stmt_execute($stmt);
     
-            // Now update the product's total quantity in the products table
+            // Now update the product's  quantity in the products table
             $updateQuery = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
             $updateStmt = mysqli_prepare($this->dbh, $updateQuery);
             mysqli_stmt_bind_param($updateStmt, "ii", $item['quantity'], $item['product_id']);
@@ -120,19 +119,16 @@ class CartOperations {
         }
     }
     
-    // Clear the cart
-    public function clearCart($user_id) {
-        $query = "DELETE FROM qoutes WHERE user_id = ?";
+    public function clearCart($user_id, $order_id) {
+        $query = "UPDATE qoutes SET order_id = ? WHERE user_id = ? AND order_id IS NULL";
         $stmt = mysqli_prepare($this->dbh, $query);
-        mysqli_stmt_bind_param($stmt, "i", $user_id);
+        mysqli_stmt_bind_param($stmt, "ii", $order_id, $user_id);
         mysqli_stmt_execute($stmt);
     }
+    
 
     public function updateCartQuantity( $product_id, $quantity) {
-                echo("i am here");
-                echo $product_id;
-                echo $quantity;
-            $updateQuery = "UPDATE qoutes SET quantity = ? WHERE product_id = ?";
+             $updateQuery = "UPDATE qoutes SET quantity = ? WHERE product_id = ?";
             $updateStmt = mysqli_prepare($this->dbh, $updateQuery);
             mysqli_stmt_bind_param($updateStmt, "ii", $quantity, $product_id );
             mysqli_stmt_execute($updateStmt);

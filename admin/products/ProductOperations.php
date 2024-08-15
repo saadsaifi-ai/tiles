@@ -44,13 +44,13 @@ class ProductOperations {
     
 
     public function addProduct($name, $price, $quantity, $image, $category_ids) {
-        // Insert product into the products table
+
         $query = "INSERT INTO products (name, price, quantity, image) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "sdis", $name, $price, $quantity, $image);
         
         if (mysqli_stmt_execute($stmt)) {
-            // Get the last inserted product ID
+
             $product_id = mysqli_insert_id($this->dbh);
             
             // Insert categories into the product_categories table
