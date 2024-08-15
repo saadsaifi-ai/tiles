@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    console.log("Loaded");
+    
+    // Load cart count on page load
+    updateCartCount();
 
     // Add to Cart
     $('.add-to-cart').click(function () {
@@ -18,9 +20,27 @@ $(document).ready(function () {
                 spinner.fadeOut(function() {
                     $(this).remove();
                 });
+                                // Increase cart count by 1
+                                updateCartCount();
             }
         });
     });
+
+    function updateCartCount() {
+        $.ajax({
+            url: 'users/cart.php?action=count',
+            method: 'GET',
+            success: function (response) {
+                let result = JSON.parse(response);  // Ensure JSON parsing
+                $('#cart-count').text(result.count);  // Update the cart icon with the correct count
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("Failed to update cart count: " + textStatus + ' : ' + errorThrown);
+            }
+        });
+    }
+    
+
 
     // Remove from Cart
     $('.remove-from-cart').click(function () {

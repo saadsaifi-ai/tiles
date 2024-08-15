@@ -30,8 +30,12 @@
                 <a class="nav-link" href="users/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="users/cart.php"><i class="fas fa-shopping-cart"></i> Cart</a>
+                <a class="nav-link" href="users/cart.php">
+                  <i class="fas fa-shopping-cart"></i> Cart
+                    <span id="cart-count" class="badge badge-pill badge-light">0</span>
+                </a>
             </li>
+
         </ul>
     </div>
 </nav>
