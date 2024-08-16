@@ -35,7 +35,6 @@ error_reporting(E_ALL);
             </thead>
             <tbody>
                 <?php
-               // require_once "../../config/DBconnection.php";
                 require "ProductOperations.php";
 
                 $productOps = new ProductOperations();

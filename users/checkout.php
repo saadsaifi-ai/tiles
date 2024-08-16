@@ -10,7 +10,17 @@ $total = $cartOps->getCartTotal($user_id);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contact = $_POST['contact'];
     $address = $_POST['address'];
+    
+    if (empty($contact) || !ctype_digit($contact)) {
+        echo "<script>alert('Please enter a valid contact number.'); window.location.href = 'checkout.php';</script>";
+        exit;
+    }
 
+    if (empty($address)) {
+        echo "<script>alert('Please enter a valid address.'); window.location.href = 'checkout.php';</script>";
+        exit;
+    }
+    
     $insufficientStockItems = [];
 
     foreach ($cartItems as $item) {
@@ -21,11 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($insufficientStockItems)) {
 
-        $cartOps->saveUserDetails($user_id, $contact, $address);
-
         $order_id = $cartOps->createOrder($user_id, $total);
         $cartOps->createOrderItems($order_id, $cartItems);
-
+        $cartOps->saveUserDetails($user_id, $order_id, $contact, $address);
         $cartOps->clearCart($user_id,$order_id);
 
         // Reset session variable for cart count

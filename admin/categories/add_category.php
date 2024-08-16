@@ -8,20 +8,16 @@ require "CategoryOperations.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $errors = [];
 
-    // Sanitize and validate inputs
     $name = trim($_POST['name']);
 
-    // Check if the fields are not empty
     if (empty($name)) {
         $errors[] = "Category name is required.";
     }
 
-    // Check if name is not an integer
     if (is_numeric($name)) {
         $errors[] = "Cateogry name cannot be a number.";
     }
 
-    // If there are errors, display them
     if (!empty($errors)) {
         foreach ($errors as $error) {
             echo "<div style='color: red;'>$error</div>";

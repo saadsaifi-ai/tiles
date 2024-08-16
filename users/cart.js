@@ -18,7 +18,6 @@ $(document).ready(function () {
                 spinner.fadeOut(function() {
                     $(this).remove();
                 });
-                                // Increase cart count by 1
                                 updateCartCount();
             }
         });
@@ -66,8 +65,6 @@ $(document).ready(function () {
     $('.update-quantity').click(function () {
         var productId = $(this).data('id');
         var quantity = $(this).closest('.col-md-4').find('.quantity-input').val();
-        console.log(quantity);
-        console.log(productId);
         if (quantity <= 0) {
             alert('Quantity must be greater than 0');
             return;

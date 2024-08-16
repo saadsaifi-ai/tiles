@@ -2,8 +2,6 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <!-- tiles/includes/header.php -->
-
     <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -21,7 +19,7 @@
     transform: translate(-50%, -50%);
     z-index: 1000;
     font-size: 24px;
-    color: #28a745; /* You can change this to your preferred color */
+    color: #28a745; 
 }
 
     </style>
