@@ -16,9 +16,9 @@
         <!-- Wall Category -->
         <div class="col-md-4 text-center">
             <h3>
-                <a href="wall.php">Wall</a>
+            <a href="category.php?id=1&name=Wall">Wall</a>
             </h3>
-            <a href="wall.php">
+            <a href="category.php?id=1&name=Wall">
                 <img src="images/wall1.jpg" alt="Wall" class="img-fluid" style="width:300px; height:200px;">
             </a>
         </div>
@@ -26,9 +26,9 @@
         <!-- Floor Category -->
         <div class="col-md-4 text-center">
             <h3>
-                <a href="floor.php">Floor</a>
+            <a href="category.php?id=2&name=Floor">Floor</a>
             </h3>
-            <a href="floor.php">
+            <a href="category.php?id=2&name=Floor">
                 <img src="images/floor1.jpg" alt="Floor" class="img-fluid" style="width:300px; height:200px;">
             </a>
         </div>
@@ -36,9 +36,9 @@
         <!-- Bathroom Category -->
         <div class="col-md-4 text-center">
             <h3>
-                <a href="bathroom.php">Bathroom</a>
+            <a href="category.php?id=3&name=Bathroom">Bathroom</a>
             </h3>
-            <a href="bathroom.php">
+            <a href="category.php?id=3&name=Bathroom">
                 <img src="images/bath1.jpg" alt="Bathroom" class="img-fluid" style="width:300px; height:200px;">
             </a>
         </div>

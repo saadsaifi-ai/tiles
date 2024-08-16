@@ -127,5 +127,36 @@ public function getProductCategories($productId) {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
+public function getAllCategoriesWithProducts() {
+    $query = "
+        SELECT c.id as category_id, c.name as category_name, p.id as product_id, p.name as product_name
+        FROM categories c
+        LEFT JOIN product_categories pc ON c.id = pc.category_id
+        LEFT JOIN products p ON pc.product_id = p.id
+        ORDER BY c.name, p.name";
+
+    $result = mysqli_query($this->dbh, $query);
+    $categories = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        if (!isset($categories[$row['category_id']])) {
+            $categories[$row['category_id']] = [
+                'id' => $row['category_id'],
+                'name' => $row['category_name'],
+                'products' => []
+            ];
+        }
+        if ($row['product_id']) {
+            $categories[$row['category_id']]['products'][] = [
+                'id' => $row['product_id'],
+                'name' => $row['product_name']
+            ];
+        }
+    }
+    return array_values($categories);
+}
+
 
 }
+
+
+

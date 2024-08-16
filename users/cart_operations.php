@@ -14,7 +14,6 @@ class CartOperations {
     }
 
     public function addToCart($user_id, $product_id, $quantity) {
-        // Check if the product already exists in the cart but without an associated order (order_id is NULL)
         $query = "SELECT id, quantity FROM qoutes WHERE user_id = ? AND product_id = ? AND order_id IS NULL";
         $stmt = mysqli_prepare($this->dbh, $query);
         mysqli_stmt_bind_param($stmt, "ii", $user_id, $product_id);
@@ -72,27 +71,13 @@ class CartOperations {
     }
     
 
-    public function saveUserDetails($user_id, $contact, $address) {
-
-        $query = "SELECT id FROM user_details WHERE user_id = ?";
+    public function saveUserDetails($user_id, $order_id, $contact, $address) {
+        $query = "INSERT INTO order_addresses (order_id, user_id, contact, address) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($this->dbh, $query);
-        mysqli_stmt_bind_param($stmt, "i", $user_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if (mysqli_num_rows($result) > 0) {
-            // Update existing details
-            $query = "UPDATE user_details SET contact = ?, address = ? WHERE user_id = ?";
-            $stmt = mysqli_prepare($this->dbh, $query);
-            mysqli_stmt_bind_param($stmt, "ssi", $contact, $address, $user_id);
-        } else {
-            // Insert new details
-            $query = "INSERT INTO user_details (user_id, contact, address) VALUES (?, ?, ?)";
-            $stmt = mysqli_prepare($this->dbh, $query);
-            mysqli_stmt_bind_param($stmt, "iss", $user_id, $contact, $address);
-        }
+        mysqli_stmt_bind_param($stmt, "iiss", $order_id, $user_id, $contact, $address);
         mysqli_stmt_execute($stmt);
     }
+    
 
     public function createOrder($user_id, $total) {
         $query = "INSERT INTO orders (user_id, bill) VALUES (?, ?)";

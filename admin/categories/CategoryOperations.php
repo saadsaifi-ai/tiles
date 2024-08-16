@@ -1,6 +1,4 @@
 <?php
-
-// Include config file
 require_once('/var/www/html/tile2/config/DBconection.php');
 class CategoryOperations {
     private $dbh;
